@@ -13,7 +13,7 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/token/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

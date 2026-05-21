@@ -95,8 +95,8 @@ export default function OutfitsPage() {
       const headers = { Authorization: `Bearer ${token}` };
       
       const [outfitsRes, itemsRes] = await Promise.all([
-        fetch("http://localhost:8000/api/outfits/", { headers }),
-        fetch("http://localhost:8000/api/clothing-items/", { headers })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/`, { headers }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/`, { headers })
       ]);
 
       if (outfitsRes.ok && itemsRes.ok) {
@@ -122,8 +122,8 @@ export default function OutfitsPage() {
       const token = localStorage.getItem("access_token");
       
       const url = editingOutfitId 
-        ? `http://localhost:8000/api/outfits/${editingOutfitId}/`
-        : "http://localhost:8000/api/outfits/";
+        ? `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/${editingOutfitId}/`
+        : `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/`;
         
       const method = editingOutfitId ? "PUT" : "POST";
 
@@ -161,7 +161,7 @@ export default function OutfitsPage() {
     if (!confirm("Tem certeza que deseja deletar esse look?")) return;
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`http://localhost:8000/api/outfits/${id}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/${id}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -197,12 +197,12 @@ export default function OutfitsPage() {
     );
   };
 
-  const getImageUrl = (path: string) => path.startsWith("http") ? path : `http://localhost:8000${path}`;
+  const getImageUrl = (path: string) => path.startsWith("http") ? path : `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}${path}`;
 
   const markAsUsed = async (outfitId: number) => {
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`http://localhost:8000/api/outfits/${outfitId}/wear/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/${outfitId}/wear/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` }
       });

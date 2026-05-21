@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [usedOutfits, setUsedOutfits] = useState<Set<number>>(new Set());
 
-  const getImageUrl = (path: string) => path.startsWith("http") ? path : `http://localhost:8000${path}`;
+  const getImageUrl = (path: string) => path.startsWith("http") ? path : `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}${path}`;
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000); // Update time every minute
@@ -51,14 +51,14 @@ export default function DashboardPage() {
         }
 
         // Fetch Clothes Count
-        const clothesRes = await fetch("http://localhost:8000/api/clothing-items/", { headers });
+        const clothesRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/`, { headers });
         if (clothesRes.ok) {
           const clothes = await clothesRes.json();
           setClothesCount(clothes.length);
         }
 
         // Fetch Outfits
-        const outfitsRes = await fetch("http://localhost:8000/api/outfits/", { headers });
+        const outfitsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/`, { headers });
         if (outfitsRes.ok) {
           const outfits: Outfit[] = await outfitsRes.json();
           setOutfitsCount(outfits.length);
@@ -109,7 +109,7 @@ export default function DashboardPage() {
   const markAsUsed = async (outfitId: number) => {
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`http://localhost:8000/api/outfits/${outfitId}/wear/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/outfits/${outfitId}/wear/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` }
       });

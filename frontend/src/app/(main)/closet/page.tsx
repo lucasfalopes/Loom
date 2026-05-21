@@ -60,7 +60,7 @@ export default function ClosetPage() {
   const fetchItems = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch("http://localhost:8000/api/clothing-items/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -74,7 +74,7 @@ export default function ClosetPage() {
     }
   };
 
-  const getImageUrl = (path: string) => path.startsWith("http") ? path : `http://localhost:8000${path}`;
+  const getImageUrl = (path: string) => path.startsWith("http") ? path : `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}${path}`;
 
   const filteredItems = activeFilter === "ALL"
     ? items

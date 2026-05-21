@@ -23,7 +23,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   const fetchUserStatus = async (token: string) => {
     try {
-      const res = await fetch("http://localhost:8000/api/users/me/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/users/me/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {

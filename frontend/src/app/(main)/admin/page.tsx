@@ -61,7 +61,7 @@ export default function AdminPage() {
     }
   }, [toast]);
 
-  const getImageUrl = (path: string) => path.startsWith("http") ? path : `http://localhost:8000${path}`;
+  const getImageUrl = (path: string) => path.startsWith("http") ? path : `${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}${path}`;
 
   useEffect(() => {
     checkAdminAndFetchData();
@@ -73,7 +73,7 @@ export default function AdminPage() {
 
     try {
       // Verifica permissões
-      const meRes = await fetch("http://localhost:8000/api/users/me/", {
+      const meRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/users/me/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!meRes.ok) return router.push("/");
@@ -82,12 +82,12 @@ export default function AdminPage() {
 
       // Fetch tab data
       if (activeTab === "users") {
-        const res = await fetch("http://localhost:8000/api/users/", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/users/`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) setUsers(await res.json());
       } else {
-        const res = await fetch("http://localhost:8000/api/clothing-items/", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) setClothes(await res.json());
@@ -102,7 +102,7 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch("http://localhost:8000/api/users/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/users/`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -145,7 +145,7 @@ export default function AdminPage() {
         formData.append("image", file);
         formData.append("category", selectedCategory);
 
-        return fetch("http://localhost:8000/api/clothing-items/", {
+        return fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
@@ -173,7 +173,7 @@ export default function AdminPage() {
     if (!confirm("Tem certeza que deseja deletar esta roupa?")) return;
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`http://localhost:8000/api/clothing-items/${id}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/${id}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -187,7 +187,7 @@ export default function AdminPage() {
     setIsExporting(true);
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch("http://localhost:8000/api/clothing-items/export_zip/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || \"http://localhost:8000\"}/api/clothing-items/export_zip/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
